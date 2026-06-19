@@ -1,0 +1,195 @@
+{
+  "tipos_tamanho": [
+    {
+      "id": 1,
+      "descricao": "Pequeno (200ml)"
+    },
+    {
+      "id": 2,
+      "descricao": "Médio (300ml)"
+    },
+    {
+      "id": 3,
+      "descricao": "Grande (400ml)"
+    },
+    {
+      "id": 4,
+      "descricao": "Família (500ml)"
+    }
+  ],
+  "status_pedido": [
+    {
+      "id": 1,
+      "descricao": "Pedido em espera"
+    },
+    {
+      "id": 2,
+      "descricao": "Em preparo"
+    },
+    {
+      "id": 3,
+      "descricao": "Pronto para retirada"
+    },
+    {
+      "id": 4,
+      "descricao": "Entregue"
+    },
+    {
+      "id": 5,
+      "descricao": "Pedido pendente"
+    },
+    {
+      "id": 6,
+      "descricao": "Pedido realizado"
+    }
+  ],
+  "pedidos": [],
+  "opcionais": {
+    "acompanhamentos": [
+      {
+        "id": 1,
+        "nome": "Pão de Queijo (2 unidades)",
+        "descricao": "Pão de queijo mineiro assado na hora, crocante por fora e macio por dentro.",
+        "foto": "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=75&h=75&fit=crop",
+        "valor": 8,
+        "eh_novidade": true
+      },
+      {
+        "id": 2,
+        "nome": "Croissant de Manteiga",
+        "descricao": "Croissant folhado artesanal com manteiga francesa.",
+        "foto": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=75&h=75&fit=crop",
+        "valor": 10,
+        "eh_novidade": false
+      },
+      {
+        "id": 3,
+        "nome": "Fatia de Bolo do Dia",
+        "descricao": "Pergunte ao atendente o sabor do dia!",
+        "foto": "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=75&h=75&fit=crop",
+        "valor": 12,
+        "eh_novidade": false
+      },
+      {
+        "id": 4,
+        "nome": "Combo Pão de Queijo + Suco",
+        "descricao": "2 pães de queijo + suco natural de laranja ou maracujá.",
+        "foto": "https://images.unsplash.com/photo-1509358271058-acd22cc93898?w=75&h=75&fit=crop",
+        "valor": 18,
+        "eh_novidade": true
+      }
+    ],
+    "bebidas": [
+      {
+        "id": 1,
+        "nome": "Suco de Laranja Natural",
+        "descricao": "Suco coado na hora, sem adição de açúcar.",
+        "foto": "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=75&h=75&fit=crop",
+        "valor": 10,
+        "eh_novidade": false
+      },
+      {
+        "id": 2,
+        "nome": "Água com Gás 500ml",
+        "descricao": "",
+        "foto": "https://images.unsplash.com/photo-1564419320461-6870880221ad?w=75&h=75&fit=crop",
+        "valor": 6,
+        "eh_novidade": false
+      },
+      {
+        "id": 3,
+        "nome": "Limonada Suíça",
+        "descricao": "Limão, leite condensado e creme de leite batidos na hora.",
+        "foto": "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=75&h=75&fit=crop",
+        "valor": 14,
+        "eh_novidade": true
+      },
+      {
+        "id": 4,
+        "nome": "Chá Gelado Pêssego",
+        "descricao": "Chá de pêssego artesanal servido gelado.",
+        "foto": "https://images.unsplash.com/photo-1499638673689-79a0b5115d87?w=75&h=75&fit=crop",
+        "valor": 10,
+        "eh_novidade": false
+      }
+    ]
+  },
+  "menu": {
+    "especiais": [
+      {
+        "id": 1,
+        "nome": "Espresso Trufado",
+        "foto": "https://images.pexels.com/photos/22092265/pexels-photo-22092265.jpeg",
+        "descricao": "Espresso duplo encorpado com calda de trufa negra e espuma de leite integral. Experiência única.",
+        "valor": 22,
+        "eh_novidade": true
+      }
+    ],
+    "cafes": [
+      {
+        "id": 1,
+        "nome": "Espresso Clássico",
+        "foto": "https://images.pexels.com/photos/34144287/pexels-photo-34144287.jpeg",
+        "descricao": "Grão 100% arábica, torra média, extração precisa. Puro e sem floreios.",
+        "valor": 8,
+        "eh_novidade": false
+      },
+      {
+        "id": 2,
+        "nome": "Cappuccino Italiano",
+        "foto": "https://images.pexels.com/photos/2876038/pexels-photo-2876038.jpeg",
+        "descricao": "Espresso com leite vaporizado cremoso e espuma densa na proporção clássica italiana.",
+        "valor": 14,
+        "eh_novidade": false
+      },
+      {
+        "id": 3,
+        "nome": "Latte Caramelo",
+        "foto": "https://images.pexels.com/photos/15086185/pexels-photo-15086185.jpeg",
+        "descricao": "Espresso suave com muito leite vaporizado, calda de caramelo e chantilly.",
+        "valor": 18,
+        "eh_novidade": true
+      },
+      {
+        "id": 4,
+        "nome": "Cold Brew 24h",
+        "foto": "https://images.pexels.com/photos/34418035/pexels-photo-34418035.jpeg",
+        "descricao": "Café extraído a frio por 24 horas. Sabor suave, encorpado e naturalmente adocicado.",
+        "valor": 16,
+        "eh_novidade": true
+      },
+      {
+        "id": 5,
+        "nome": "Café com Leite da Casa",
+        "foto": "https://images.pexels.com/photos/459489/pexels-photo-459489.jpeg",
+        "descricao": "O clássico de sempre. Café coado forte com leite quente na caneca grande.",
+        "valor": 10,
+        "eh_novidade": false
+      },
+      {
+        "id": 6,
+        "nome": "Mocha",
+        "foto": "https://images.pexels.com/photos/14761085/pexels-photo-14761085.jpeg",
+        "descricao": "Espresso com calda de chocolate belga, leite vaporizado e finalizado com cacau em pó.",
+        "valor": 17,
+        "eh_novidade": false
+      },
+      {
+        "id": 7,
+        "nome": "Macchiato",
+        "foto": "https://images.pexels.com/photos/10187350/pexels-photo-10187350.jpeg",
+        "descricao": "Espresso curto manchado com uma colherada de espuma de leite. Intenso e direto.",
+        "valor": 10,
+        "eh_novidade": false
+      },
+      {
+        "id": 8,
+        "nome": "Cappuccino da Resenha ✌️",
+        "foto": "https://images.pexels.com/photos/32158137/pexels-photo-32158137/free-photo-of-delicious-cappuccino-with-frothy-cinnamon-top.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+        "descricao": "Cappuccino cremoso com canela e chocolate, perfeito para acompanhar uma boa resenha entre amigos.",
+        "valor": 18.9,
+        "eh_novidade": true
+      }
+    ]
+  }
+}
