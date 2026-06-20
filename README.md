@@ -34,49 +34,47 @@ O **Café Dois Dedim** é uma transformação completa do sistema T-Burguer, mig
 }
 ```
 
-**Seleção de tamanho com `v-model` e estilo reativo no `PedidoView.vue`:**
+**Seleção de tamanho com `v-model` e estilo reativo no `PedidoComponent.vue`:**
 ```html
-<label
-  v-for="tam in tiposTamanho"
-  :key="tam.id"
-  :class="['tamanho-option', { 'tamanho-option--ativo': pedido.tamanho && pedido.tamanho.id === tam.id }]"
->
-  <input type="radio" :value="tam" v-model="pedido.tamanho" style="display:none" />
-  {{ tam.descricao }}
-</label>
+<select v-model="tamanhoSelecionado">
+  <option value="">Selecione o tamanho</option>
+  <option v-for="tamanho in listaTamanhos" :key="tamanho.id" :value="tamanho">
+    {{ tamanho.descricao }}
+  </option>
+</select>
 ```
 
-**Toggle de acompanhamentos (multi-seleção):**
-```js
-toggleAcompanhamento(item) {
-  const idx = this.pedido.acompanhamentos.findIndex(a => a.id === item.id)
-  if (idx >= 0) this.pedido.acompanhamentos.splice(idx, 1)
-  else          this.pedido.acompanhamentos.push(item)
-}
+**Toggle de acompanhamentos e bebidas (multi-seleção via checkbox):**
+```html
+<input
+  type="checkbox"
+  :value="acomp"
+  v-model="listaAcompanhamentosSelecionados"
+/>
 ```
 
 ---
 
 ## 🚨 Solução Técnica dos Alertas Semânticos
 
-O sistema de alertas é implementado no componente `Alerta.vue` e utilizado em todas as views via composição simples de props e eventos.
+O sistema de alertas é implementado no componente `AlertaComponent.vue` e utilizado em várias telas via composição de props e eventos.
 
 ### Paleta semântica
 
-| Tipo      | Cor      | Uso                                      |
-|-----------|----------|------------------------------------------|
-| `erro`    | Vermelho | Campos obrigatórios vazios, falha na API |
-| `alerta`  | Laranja  | Avisos gerais, ações irreversíveis       |
-| `info`    | Azul     | Informações contextuais                  |
-| `sucesso` | Verde    | Pedido criado, status atualizado, exclusão confirmada |
+| Tipo      | Cor      | Uso                                                          |
+|-----------|----------|---------------------------------------------------------------|
+| `erro`    | Vermelho | Campos obrigatórios vazios, falha na API                     |
+| `alerta`  | Laranja  | Avisos (pedido sem opcionais, confirmação de exclusão)        |
+| `info`    | Azul     | Informações contextuais (café selecionado, status do pedido) |
+| `sucesso` | Verde    | Pedido criado, status atualizado, exclusão confirmada         |
 
 ### Como funciona
 
-O componente `Alerta.vue` recebe `tipo`, `mensagem` e `duracao` via props. Ele exibe ou oculta automaticamente usando `v-if` + `<transition>` e dispara um `$emit('fechar')` ao fim do timer ou ao clicar no botão de fechar.
+O componente `AlertaComponent.vue` recebe `tipo`, `mensagem` e `duracao` via props. Ele exibe ou oculta automaticamente usando `v-if` + `<transition>`, possui ícones SVG próprios para cada tipo, barra de progresso indicando o tempo até o fechamento automático, e dispara um `$emit('fechar')` ao fim do timer ou ao clicar no botão de fechar.
 
 ```vue
-<!-- Uso nas views -->
-<Alerta
+<!-- Uso nos componentes -->
+<AlertaComponent
   v-if="alerta.mensagem"
   :tipo="alerta.tipo"
   :mensagem="alerta.mensagem"
@@ -86,7 +84,7 @@ O componente `Alerta.vue` recebe `tipo`, `mensagem` e `duracao` via props. Ele e
 ```
 
 ```js
-// Método centralizado de exibição nas views
+// Método centralizado de exibição
 exibirAlerta(tipo, mensagem, duracao = 4000) {
   this.alerta = { tipo, mensagem, duracao }
 },
@@ -95,10 +93,10 @@ limparAlerta() {
 }
 ```
 
-O auto-dismiss é gerenciado com `setTimeout` dentro do próprio `Alerta.vue`, usando `watch` na prop `mensagem` para re-triggar o timer sempre que uma nova mensagem chega. Isso evita que alertas anteriores bloqueiem novos.
+O auto-dismiss é gerenciado com `setTimeout` dentro do próprio `AlertaComponent.vue`, usando `watch` na prop `mensagem` para re-triggar o timer sempre que uma nova mensagem chega. Isso evita que alertas anteriores bloqueiem novos.
 
 ```js
-// Alerta.vue
+// AlertaComponent.vue
 watch: {
   mensagem(nova) {
     if (nova) this.mostrar()
@@ -115,20 +113,26 @@ methods: {
 }
 ```
 
+### Exemplos reais de uso por tipo
+
+- **Info (azul):** ao selecionar um café no cardápio, a tela de configuração exibe *"Você selecionou [café]. Agora escolha o tamanho e os opcionais do seu pedido."* Também aparece quando o status de um pedido muda para "Em preparo", "Pronto para retirada" ou "Entregue".
+- **Alerta (laranja):** ao confirmar um pedido sem nenhum acompanhamento ou bebida selecionada, ou antes de excluir um pedido (modal de confirmação).
+- **Erro (vermelho):** campos obrigatórios vazios (nome, tamanho) ou falha de comunicação com a API.
+- **Sucesso (verde):** pedido criado, status atualizado, exclusão confirmada.
+
 ### Validação de formulário
 
-O método `validar()` em `PedidoView.vue` bloqueia o envio se nome, café ou tamanho estiverem ausentes, exibindo mensagens de erro inline em cada campo e um alerta global vermelho:
+O método `validar()` em `PedidoComponent.vue` bloqueia o envio se nome ou tamanho estiverem ausentes, exibindo mensagens de erro inline em cada campo e um alerta global vermelho:
 
 ```js
 validar() {
   let valido = true
-  this.erros = { nome: '', cafe: '', tamanho: '' }
+  this.erros = { nome: '', tamanho: '' }
 
-  if (!this.pedido.nome)    { this.erros.nome    = 'Informe o nome do cliente.'; valido = false }
-  if (!this.pedido.cafe)    { this.erros.cafe    = 'Selecione um café.';         valido = false }
-  if (!this.pedido.tamanho) { this.erros.tamanho = 'Selecione o tamanho.';       valido = false }
+  if (!this.nomeCliente.trim()) { this.erros.nome = 'Informe o seu nome.'; valido = false }
+  if (!this.tamanhoSelecionado) { this.erros.tamanho = 'Selecione o tamanho.'; valido = false }
 
-  if (!valido) this.exibirAlerta('erro', '❌ Preencha os campos obrigatórios antes de confirmar.')
+  if (!valido) this.exibirAlerta('erro', 'Preencha os campos obrigatórios antes de confirmar.')
   return valido
 }
 ```
@@ -138,9 +142,9 @@ validar() {
 ## 🧭 Diretrizes UX implementadas
 
 - **Redirecionamento automático:** após confirmação do pedido, um alerta verde é exibido e a navegação para `/pedidos` ocorre automaticamente após 2,6 segundos via `setTimeout + this.$router.push`.
-- **Listagem atualizada em tempo real:** `PedidosView` carrega os dados na hook `created()`, garantindo que o pedido recém-criado já apareça na listagem.
-- **Remoção reativa:** ao excluir um pedido, o array `pedidos` é filtrado diretamente (`this.pedidos = this.pedidos.filter(...)`) sem necessidade de reload — Vue re-renderiza a lista instantaneamente.
-- **Modal de confirmação:** exclusões são protegidas por um modal que exige confirmação explícita do usuário.
+- **Listagem atualizada em tempo real:** `ListaPedidoComponent` carrega os dados na hook `mounted()`, garantindo que o pedido recém-criado já apareça na listagem.
+- **Remoção reativa:** ao excluir um pedido, o array `listaPedidosRealizados` é filtrado diretamente (`this.listaPedidosRealizados = this.listaPedidosRealizados.filter(...)`) sem necessidade de reload — Vue re-renderiza a lista instantaneamente.
+- **Modal de confirmação:** exclusões são protegidas por um modal que exige confirmação explícita do usuário, acionado por um alerta de aviso (laranja).
 
 ---
 
@@ -148,12 +152,12 @@ validar() {
 
 | Recurso | URL |
 |---------|-----|
-| 🌐 **Deploy (GitHub Pages)** | `https://SEU_USUARIO.github.io/cafe-dois-dedim/` |
-| 🗄️ **API (JSON Server / Render)** | `https://sua-api-cafe.onrender.com` |
-| 📁 **Repositório Front-end** | `https://github.com/SEU_USUARIO/cafe-dois-dedim` |
-| 🗃️ **Repositório banco-json** | `https://github.com/SEU_USUARIO/banco-json-cafe` |
-
-> Substitua `SEU_USUARIO` pelo seu usuário do GitHub após o deploy.
+| 🌐 **Deploy (Vercel)** | https://cafe-dois-dedin.vercel.app/ |
+| 🌐 **Deploy (Netlify)** | https://jade-ganache-2897a5.netlify.app/ |
+| 🌐 **Deploy (GitHub Pages)** | https://guiandrade17.github.io/cafe-dois-dedin/ |
+| 🗄️ **API (JSON Server / Render)** | https://cafe-dois-dedin-api.onrender.com |
+| 📁 **Repositório Front-end** | https://github.com/guiandrade17/cafe-dois-dedin |
+| 🗃️ **Repositório banco-json** | https://github.com/guiandrade17/cafe-dois-dedin |
 
 ---
 
@@ -182,25 +186,28 @@ Acesse em: `http://localhost:8080`
 ```
 cafe-dois-dedim/
 ├── db/
-│   └── db.json              # Mock da API (JSON Server)
+│   └── db.json                       # Mock da API (JSON Server)
 ├── public/
-│   └── index.html
+│   └── img/                          # Banner, logo e imagens locais
 ├── src/
 │   ├── components/
-│   │   ├── Alerta.vue       # Alertas semânticos reativos
-│   │   ├── CardCafe.vue     # Card de item do cardápio
-│   │   └── NavBar.vue       # Barra de navegação
+│   │   ├── AlertaComponent.vue       # Alertas semânticos reativos
+│   │   ├── BannerComponent.vue       # Banner da Home
+│   │   ├── NavBarComponent.vue       # Barra de navegação com logo
+│   │   ├── PedidoComponent.vue       # Formulário de configuração do pedido
+│   │   └── ListaPedidoComponent.vue  # Listagem e gerenciamento de pedidos
 │   ├── router/
-│   │   └── index.js         # Vue Router 4
+│   │   └── index.js                  # Vue Router 4
 │   ├── views/
-│   │   ├── HomeView.vue     # Tela inicial
-│   │   ├── PedidoView.vue   # Formulário de pedido
-│   │   └── PedidosView.vue  # Listagem e gerenciamento
-│   ├── App.vue              # Layout raiz + estilos globais
-│   └── main.js              # Entry point
-├── .env.desenvolvimento      # URL da API local
-├── .env.production           # URL da API pública
-├── vue.config.js             # publicPath para GitHub Pages
+│   │   ├── HomeView.vue              # Tela inicial
+│   │   ├── MenuView.vue              # Cardápio
+│   │   ├── ConfiguracaoPedidoView.vue# Tela de configuração do pedido
+│   │   └── PedidoView.vue            # Listagem de pedidos
+│   ├── App.vue                       # Layout raiz + estilos globais
+│   └── main.js                       # Entry point ($apiUrl global)
+├── .env.development                  # URL da API local
+├── .env.production                   # URL da API pública
+├── vue.config.js                     # publicPath para GitHub Pages
 └── package.json
 ```
 
@@ -208,11 +215,11 @@ cafe-dois-dedim/
 
 ## 🛠️ Tecnologias Utilizadas
 
-- [Vue 3](https://vuejs.org/) — Composition API / Options API
+- [Vue 3](https://vuejs.org/) — Options API
 - [Vue Router 4](https://router.vuejs.org/)
 - [JSON Server](https://github.com/typicode/json-server) — Mock REST API
 - HTML5 + CSS3 — sem frameworks externos de UI
-- GitHub Pages — hospedagem do front-end
+- Vercel / Netlify / GitHub Pages — hospedagem do front-end
 - Render — hospedagem do banco-json
 
 ---
