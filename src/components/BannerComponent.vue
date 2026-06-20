@@ -1,8 +1,8 @@
 <template>
   <div id="main-banner">
-    <img src="./img/cafe.jpg" alt="Banner Café Dois Dedim" id="banner-img" />
+    <img :src="banner" alt="Banner Café Dois Dedim" id="banner-img" />
     <div id="banner-overlay">
-      <h1>Café Dois Dedin ☕✌️</h1>
+      <h1>Café Dois Dedim ☕✌️</h1>
     </div>
   </div>
 </template>
@@ -10,6 +10,11 @@
 <script>
 export default {
   name: "BannerComponent",
+  data() {
+    return {
+      banner: process.env.BASE_URL + "img/cafe.jpg"
+    }
+  }
 };
 </script>
 

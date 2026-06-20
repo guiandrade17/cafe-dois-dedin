@@ -2,7 +2,7 @@
   <div>
     <nav id="nav">
       <router-link to="/" id="logo-url">
-        <img src="./img/logo_cafe.jpeg" id="logo" />
+        <img :src="logo" id="logo" />
       </router-link>
       <router-link to="/">Home</router-link> |
       <router-link to="/menu">Cardápio</router-link> |
@@ -14,6 +14,11 @@
 <script>
 export default {
   name: "NavBarComponent",
+  data() {
+    return {
+      logo: process.env.BASE_URL + "img/logo_cafe.jpeg"
+    }
+  }
 };
 </script>
 
