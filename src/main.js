@@ -4,6 +4,8 @@ import router from './router'
 
 const app = createApp(App);
 
+console.log("API URL =", process.env.VUE_APP_API_BASE_URL);
+
 app.config.globalProperties.$apiUrl = process.env.VUE_APP_API_BASE_URL;
 
 app.use(router).mount('#app')
