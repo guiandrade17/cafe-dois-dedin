@@ -2,7 +2,7 @@
   <div>
     <nav id="nav">
       <router-link to="/" id="logo-url">
-        <img src="/img/logo_cafe.jpeg" id="logo" />
+        <img :src="process.env.BASE_URL + 'img/logo_cafe.jpeg'" id="logo" />
       </router-link>
       <router-link to="/">Home</router-link> |
       <router-link to="/menu">Cardápio</router-link> |

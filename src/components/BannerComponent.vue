@@ -1,6 +1,6 @@
 <template>
   <div id="main-banner">
-    <img src="/img/cafe.jpg" alt="Banner Café Dois Dedim" id="banner-img" />
+    <img :src="process.env.BASE_URL + 'img/cafe.jpg'" alt="Banner Café Dois Dedim" id="banner-img" />
     <div id="banner-overlay">
       <h1>Café Dois Dedin ☕✌️</h1>
     </div>
