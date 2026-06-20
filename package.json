@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "bancojson": "json-server --watch db/db.json"
+    "bancojson": "json-server --watch db/db.json",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-service": "~5.0.0"
+    "@vue/cli-service": "~5.0.0",
+    "gh-pages": "^6.3.0"
   }
 }
