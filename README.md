@@ -1,4 +1,4 @@
-# ☕ Café Dois Dedim
+# ☕ Café Dois Dedin
 
 Sistema de gerenciamento de pedidos para cafeteria artesanal, desenvolvido com **Vue 3** como projeto final da disciplina de Desenvolvimento Web — CEUB.
 
